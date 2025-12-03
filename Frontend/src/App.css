@@ -1,0 +1,303 @@
+/* App.css — Default base styles for a React app (Coral IVR-AI) */
+
+/* ========== CSS VARIABLES ========== */
+:root {
+  --bg: #0f1724; /* deep background */
+  --card: #0b1220; /* card / surface */
+  --muted: #9aa4b2;
+  --accent: #00bcd4; /* coral-ish teal */
+  --accent-2: #ff7a59; /* warm accent for highlights */
+  --text: #e6eef6;
+  --glass: rgba(255, 255, 255, 0.04);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-sm: 0 4px 12px rgba(2, 6, 23, 0.6);
+  --shadow-md: 0 8px 28px rgba(2, 6, 23, 0.7);
+
+  --max-width: 1100px;
+  --gap: 1rem;
+  --transition: 180ms ease;
+}
+
+/* ========== RESET / BASE ========== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, var(--bg), #07111a 120%);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45;
+  font-size: 16px;
+}
+
+/* Remove default list and anchor styling */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ========== LAYOUT HELPERS ========== */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+/* Centering helpers */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== APP STRUCTURE ========== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.2px;
+}
+
+.brand .logo {
+  width: 36px;
+  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #05121a;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Main content area */
+.main {
+  flex: 1;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1rem;
+}
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 320px;
+}
+
+/* Content card */
+.card {
+  background: linear-gradient(180deg, var(--card), rgba(255, 255, 255, 0.01));
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive: collapse to single column on small screens */
+@media (max-width: 880px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text);
+}
+
+p {
+  margin: 0 0 0.75rem 0;
+  color: var(--muted);
+}
+
+/* ========== FORM ELEMENTS ========== */
+.input,
+textarea {
+  width: 100%;
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.input:focus,
+textarea:focus {
+  box-shadow: 0 6px 18px rgba(0, 188, 212, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #05121a;
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 6px 20px rgba(0, 188, 212, 0.08);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.997);
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  box-shadow: none;
+}
+
+/* ========== CARDS & PANELS ========== */
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+/* small meta labels */
+.kv {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ========== SIMPLE CHAT UI (IVR Testing) ========== */
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 280px;
+  max-height: 560px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.bubble {
+  max-width: 78%;
+  padding: 0.65rem 0.9rem;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  box-shadow: 0 6px 24px rgba(2, 6, 23, 0.6);
+}
+
+.bubble.user {
+  margin-left: auto;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: var(--text);
+}
+
+.bubble.bot {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 188, 212, 0.08),
+    rgba(255, 122, 89, 0.06)
+  );
+  color: #05121a;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ========== UTILITIES ========== */
+.row {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.round {
+  border-radius: 999px;
+}
+
+/* simple divider */
+.hr {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.03);
+  margin: 0.6rem 0;
+}

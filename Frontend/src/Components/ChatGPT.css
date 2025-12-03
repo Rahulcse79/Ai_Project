@@ -1,0 +1,77 @@
+.coral-chat-container {
+  max-width: 600px;
+  margin: 40px auto;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.coral-chat-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.coral-chat-window {
+  background: #111;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.coral-chat-message {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 15px;
+  color: #000;
+  max-width: 80%;
+  word-break: break-word;
+  margin-bottom: 10px;
+}
+
+.coral-chat-message.coral-user {
+  background: #00bcd4;
+  text-align: right;
+  float: right;
+  clear: both;
+}
+
+.coral-chat-message.coral-ai {
+  background: #ff7a59;
+  text-align: left;
+  float: left;
+  clear: both;
+}
+
+.coral-loading {
+  color: #ccc;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.coral-chat-input {
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  resize: none;
+  font-size: 16px;
+  border: none;
+  outline: none;
+}
+
+.coral-chat-send {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #00bcd4;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.coral-chat-send:hover {
+  background: #00a2b0;
+}
