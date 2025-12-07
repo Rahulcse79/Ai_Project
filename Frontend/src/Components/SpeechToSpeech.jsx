@@ -6,12 +6,11 @@ const recorder = new MicRecorder({ bitRate: 128 });
 
 const SpeechToSpeech = () => {
   const [recording, setRecording] = useState(false);
-  const [audioFile, setAudioFile] = useState(null);
+  const [audioFile, setAudioFile] = useState(null); // Latest user recording
   const [chatHistory, setChatHistory] = useState([]);
-  const [lastAudioURL, setLastAudioURL] = useState(null);
-
   const playingAudio = useRef(null);
 
+  // Stop currently playing audio
   const stopCurrentAudio = () => {
     if (playingAudio.current) {
       playingAudio.current.pause();
@@ -20,6 +19,7 @@ const SpeechToSpeech = () => {
     }
   };
 
+  // Start recording
   const startRecording = async () => {
     stopCurrentAudio();
     try {
@@ -31,6 +31,7 @@ const SpeechToSpeech = () => {
     }
   };
 
+  // Stop recording
   const stopRecording = async () => {
     stopCurrentAudio();
     try {
@@ -39,9 +40,10 @@ const SpeechToSpeech = () => {
       setAudioFile(file);
       setRecording(false);
 
-      const audioURL = URL.createObjectURL(file);
-      setLastAudioURL(audioURL);
+      // Optionally, auto-play user recording
+      // replayLastRecording();
 
+      // Send to API for transcription and TTS
       handleApiCall(file);
     } catch (err) {
       console.error(err);
@@ -50,15 +52,24 @@ const SpeechToSpeech = () => {
     }
   };
 
+  // Replay the latest user recording
   const replayLastRecording = () => {
-    if (!lastAudioURL) return alert("No recording to play");
+    if (!audioFile) return alert("No recording to play");
+
     stopCurrentAudio();
-    const audioEl = new Audio(lastAudioURL);
+
+    const audioURL = URL.createObjectURL(audioFile);
+    const audioEl = new Audio(audioURL);
     playingAudio.current = audioEl;
+
     audioEl.play();
-    audioEl.onended = () => (playingAudio.current = null);
+    audioEl.onended = () => {
+      playingAudio.current = null;
+      URL.revokeObjectURL(audioURL); // clean up
+    };
   };
 
+  // Call your backend API
   const handleApiCall = async (file) => {
     if (!file) return;
 
@@ -74,7 +85,7 @@ const SpeechToSpeech = () => {
       });
       const data = await res.json();
 
-      // Add user transcription
+      // Add user transcription to chat
       if (data.transcription) {
         setChatHistory((prev) => [
           ...prev,
@@ -82,7 +93,7 @@ const SpeechToSpeech = () => {
         ]);
       }
 
-      // Add AI response
+      // Add AI response and TTS audio
       if (data.ttsFile && data.ttsFile.data) {
         const audioBlob = new Blob(
           [Uint8Array.from(atob(data.ttsFile.data), (c) => c.charCodeAt(0))],
@@ -92,7 +103,7 @@ const SpeechToSpeech = () => {
 
         setChatHistory((prev) => [
           ...prev,
-          { type: "ai", text: data.aiReply, audioURL },
+          { type: "ai", text: data.aiReply, audioURL, blob: audioBlob },
         ]);
       }
     } catch (err) {
@@ -101,7 +112,7 @@ const SpeechToSpeech = () => {
     }
   };
 
-  // Use effect to auto-play latest AI audio when chatHistory changes
+  // Auto-play AI audio whenever chatHistory updates
   useEffect(() => {
     if (chatHistory.length === 0) return;
 
@@ -111,10 +122,15 @@ const SpeechToSpeech = () => {
       const audioEl = new Audio(lastEntry.audioURL);
       playingAudio.current = audioEl;
       audioEl.play();
-      audioEl.onended = () => (playingAudio.current = null);
+      audioEl.onended = () => {
+        playingAudio.current = null;
+        // Optionally clean up AI audio URLs after playback
+        // URL.revokeObjectURL(lastEntry.audioURL);
+      };
     }
   }, [chatHistory]);
 
+  // Handle manual audio play (from audio controls)
   const handleAudioPlay = (audioEl) => {
     stopCurrentAudio();
     playingAudio.current = audioEl;
